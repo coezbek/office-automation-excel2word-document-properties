@@ -11,6 +11,8 @@ Features:
 - Afterwards adding additional cells to be transferred to Word can be done without entering the VBA macro editor.
 - The word template is embedded into the xlsx file, so need to keep the Word template somewhere.
 
+How does it work: Every Named Range in Excel is inserted into Word as a Document Property which can be shown in the Document using a DocProperty field.
+
 ## Caution
 
 Running Office macros from untrusted source is dangerous. So make sure you know what you are doing. Please also see the [License](https://github.com/coezbek/office-automation-excel2word-document-properties/blob/main/LICENSE) for a disclaimer.
@@ -64,3 +66,4 @@ You might also want to rename the Button to something more meaningful such as `E
 - Add a way to automatically save/save as pdf the created report.
 - Add a way to use a word template from disk rather than embedded into the report.
 - Add handling of cell ranges to be exported nicely.
+- Add a way to update an existing document rather than re-export every time.

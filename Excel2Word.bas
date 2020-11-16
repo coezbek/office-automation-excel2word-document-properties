@@ -14,6 +14,8 @@ Option Explicit                           ' This will make VBA raise an error if
 '
 Sub ExportExcel2Word()
      
+  ' If you get an error here about the specified name not being found, then you need to rename your shape
+  ' object containing the word document to match "TemplateShape"
   Call ExportWordFromShape(ActiveSheet.Shapes("TemplateShape"), Join(NamedRangesNames(), ", "), e2wModeExport)
   
 End Sub
@@ -50,6 +52,15 @@ Public Sub ExportWordFromShape(shapeContainingWord As Shape, ByVal fieldlist As 
 
     Dim oWordApp As Object
     
+    ' Get new word instance
+    On Error Resume Next
+    Set oWordApp = GetObject(, "Word.Application")
+    If Err.Number <> 0 Then
+        Set oWordApp = CreateObject("Word.Application")
+    End If
+    Err.Clear
+    On Error GoTo 0
+    
     ' Open Word Document from given Shape and save using a temporary name
     Dim objWordDocument As Object
     Dim objOLE As OLEObject
@@ -65,14 +76,6 @@ Public Sub ExportWordFromShape(shapeContainingWord As Shape, ByVal fieldlist As 
         objWordDocument.SaveAs2 Filename:=templateFilename
         objWordDocument.Close saveChanges:=False
         
-        ' Get new word instance
-        On Error Resume Next
-        Set oWordApp = GetObject(, "Word.Application")
-        If Err.Number <> 0 Then
-            Set oWordApp = CreateObject("Word.Application")
-        End If
-        Err.Clear
-        On Error GoTo 0
     
         ' Create new document based on the template
         Set objWordDocument = oWordApp.Documents.Add(templateFilename, NewTemplate:=False, DocumentType:=0)
@@ -82,10 +85,16 @@ Public Sub ExportWordFromShape(shapeContainingWord As Shape, ByVal fieldlist As 
             
         ' Set document title to get a default file name
         Dim dlgProp As Variant
+        Dim wdDialogFileSummaryInfo As Integer
+        wdDialogFileSummaryInfo = 86
         Set dlgProp = oWordApp.Dialogs(wdDialogFileSummaryInfo)
-        dlgProp.Title = "990909 " & Format(Now, "yyyy.mm.dd") & " " & Evaluate("last_name").Text & ", " & Evaluate("first_name").Text
-        dlgProp.Execute
-            
+        
+        On Error Resume Next
+        dlgProp.Title = Evaluate("report_title").Text
+        If Err.Number = 0 Then
+            dlgProp.Execute
+        End If
+        
         oWordApp.Visible = True
         
     End If
@@ -139,7 +148,7 @@ End Function
 '   - e2wModeExport: Just create/update the given properties
 '   - e2wModeSetupTemplate: Also append fields showing these document properties to the document
 '
-Sub DocumentSetDocPropFromFieldList(document As Word.document, ByVal fieldlist As String, e2wMode As Integer)
+Sub DocumentSetDocPropFromFieldList(document As Object, ByVal fieldlist As String, e2wMode As Integer)
 
   Dim fields() As String
   fields = Split(fieldlist, ",")
@@ -187,8 +196,10 @@ End Sub
 '
 ' Add a DocProperty Field with the given name at the position of the given range (replacing it)
 '
-Public Sub AddDocPropertyField(ByVal r As Word.Range, ByVal propName As String)
+Public Sub AddDocPropertyField(ByVal r As Object, ByVal propName As String)
 
+    Dim wdFieldEmpty As Integer
+    wdFieldEmpty = -1
     r.fields.Add Range:=r, _
                  Type:=wdFieldEmpty, _
                  Text:="DOCPROPERTY """ & propName & """", _
@@ -203,10 +214,10 @@ End Sub
 ' Does not update any fields which are in shapes, text boxes and potentially
 ' other exotic places (see for instance: https://stackoverflow.com/a/33762199)
 '
-Public Sub UpdateAllFields(doc As document)
+Public Sub UpdateAllFields(doc As Object)
 
-  Dim section As Word.section
-  Dim header As Word.HeaderFooter
+  Dim section As Object ' Word.section
+  Dim header As Object ' Word.HeaderFooter
   
   doc.Range.fields.Update
 
@@ -227,7 +238,7 @@ End Sub
 ' Update a DocProperty in the given document with a new value or create new from given value.
 '
 ' See https://stackoverflow.com/a/14863333
-Public Sub updateCustomDocumentProperty(oDoc As document, ByVal strPropertyName As String, _
+Public Sub updateCustomDocumentProperty(oDoc As Object, ByVal strPropertyName As String, _
   varValue As Variant, docType As Office.MsoDocProperties)
 
     On Error Resume Next

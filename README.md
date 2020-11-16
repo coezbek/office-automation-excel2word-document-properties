@@ -31,7 +31,7 @@ Running Office macros from untrusted source is dangerous. So make sure you know 
 
 This will open the VBA editor.
 
-5.) Paste the entire code from [Excel2Word.bas](https://github.com/coezbek/office-automation-excel2word-document-properties/blob/main/Excel2Word.bas) (you can replace the `Sub` that was created when you created the Button.
+5.) Paste the entire code from [Excel2Word.bas](https://github.com/coezbek/office-automation-excel2word-document-properties/blob/main/Excel2Word.bas) (you can replace the `Sub` that was created when you created the button).
 
 6.) [Assign names using the Name Box](https://support.microsoft.com/en-us/office/define-and-use-names-in-formulas-4d0f13ac-53b7-422e-afd2-abd7ff379c64) to all cells which you want to export to Word.
 
@@ -45,7 +45,7 @@ This will open the word file you added in step 2 and will put all named fields a
 
 Rearrange these fields in your template to suit your needs, then close/save the template file (it automatically saves back into the Excel file).
 
-8.) Assign the `ExportExcel2Word` macro to the Button you created under step 4.
+8.) Assign the `ExportExcel2Word` macro to the button you created under step 4.
 
 Right click on Button -> `Assign Macro...` -> Select `...ExportExcel2Word` -> `OK`
 
@@ -57,7 +57,7 @@ You might also want to rename the Button to something more meaningful such as `E
 - Excel will populate all fields in the new copy and leave it open for you to edit and save.
 - A suggested file name should be populated for you.
 
-10.) Should you want to update the word template in the future, you can either run the `SetupWordTemplate` again (see step 7) or double click the word object that you added in step 2.
+10.) Should you want to update the word template in the future, you can either run the `SetupWordTemplate` again (see step 7) or double click (i.e. edit) the word object that you added in step 2.
 
 ## Open Todos
 

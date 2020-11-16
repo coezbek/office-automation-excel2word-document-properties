@@ -55,7 +55,7 @@ You might also want to rename the Button to something more meaningful such as `E
 
 - Excel will shortly open the template word document and make a copy of it.
 - Excel will populate all fields in the new copy and leave it open for you to edit and save.
-- A suggested file name should be populated for you.
+- A suggested file name should be populated for you if you have a named range called `report_title` somewhere. Note that suggested file names can't contain any special characters (underscores, dashes, dots) or at least if they do, then the file name does not contain these but is truncated.
 
 10.) Should you want to update the word template in the future, you can either run the `SetupWordTemplate` again (see step 7) or double click (i.e. edit) the word object that you added in step 2.
 

@@ -1,4 +1,4 @@
-# Excel2Word Poor Man's Office Automation using Document Properties
+# Excel2Word - Poor Man's Office Automation using Document Properties
 
 Generic way to put excel content into word documents as document properties (VBA)
 

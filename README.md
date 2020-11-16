@@ -1,4 +1,4 @@
-# Excel2Word - Poor Man's Office Automation using Document Properties
+# Excel2Word - Office Automation using Document Properties
 
 Generic way to put excel content into word documents as document properties (VBA)
 
@@ -10,6 +10,11 @@ Features:
 - Only needs tinkering with VBA once to set up.
 - Afterwards adding additional cells to be transferred to Word can be done without entering the VBA macro editor.
 - The word template is embedded into the xlsx file, so need to keep the Word template somewhere.
+
+Not Features:
+- Handling very large amounts of data
+- Handling tables
+- Putting content into Floating Objects in Word
 
 How does it work: Every Named Range in Excel is inserted into Word as a Document Property which can be shown in the Document using a DocProperty field.
 
@@ -67,3 +72,4 @@ You might also want to rename the Button to something more meaningful such as `E
 - Add a way to use a word template from disk rather than embedded into the report.
 - Add handling of cell ranges to be exported nicely.
 - Add a way to update an existing document rather than re-export every time.
+- Support fields which are placed in floating shapes in Word.

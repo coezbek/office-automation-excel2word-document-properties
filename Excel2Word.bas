@@ -90,7 +90,7 @@ Public Sub ExportWordFromShape(shapeContainingWord As Shape, ByVal fieldlist As 
         Set dlgProp = oWordApp.Dialogs(wdDialogFileSummaryInfo)
         
         On Error Resume Next
-        dlgProp.Title = Evaluate("report_title").Text
+        dlgProp.Title = MakeADocTitle(Evaluate("report_title").Text)
         If Err.Number = 0 Then
             dlgProp.Execute
         End If
@@ -107,6 +107,16 @@ Public Sub ExportWordFromShape(shapeContainingWord As Shape, ByVal fieldlist As 
     DoEvents
     
 End Sub
+
+Function MakeADocTitle(str As String) As String
+    With CreateObject("vbscript.regexp")
+        .Global = True
+        .ignorecase = True
+        .MultiLine = True
+        .Pattern = "[^a-zA-Z0-9 ]+"
+        MakeADocTitle = .Replace(str, " ")
+    End With
+End Function
 
 '
 ' Get an array with the names of all named ranges in the Active Workbook.
@@ -161,30 +171,35 @@ Sub DocumentSetDocPropFromFieldList(document As Object, ByVal fieldlist As Strin
   For Each propName In fields
   
     Dim propId As String
-  
     propName = Trim(propName)
-  
+    
     Dim propValue As String
-    propValue = Evaluate(propName).Text
-    
-    propId = propName
-    If Not startsWith(propId, "xls_") Then
-        propId = "xls_" & propId
-    End If
-    
-    If e2wMode = e2wModeExport Then
-    
-        updateCustomDocumentProperty document, propId, propValue, msoPropertyTypeString
-    
-    ElseIf e2wMode = e2wModeSetupTemplate Then
       
-        updateCustomDocumentProperty document, propId, propName & ", e.g. " & propValue, msoPropertyTypeString
+    On Error Resume Next
+    propValue = Evaluate(propName).Text
+      
+    If Err.Number = 0 Then
+      On Error GoTo 0
+      
+      propId = propName
+      If Not startsWith(propId, "xls_") Then
+        propId = "xls_" & propId
+      End If
+      
+      If e2wMode = e2wModeExport Then
+      
+        updateCustomDocumentProperty document, propId, propValue, msoPropertyTypeString
+      
+      ElseIf e2wMode = e2wModeSetupTemplate Then
         
-        document.Content.InsertAfter Text:=propName & ": "
-        document.Characters.Last.Select
-        
-        AddDocPropertyField document.ActiveWindow.Selection.Range, propId
-        document.Content.InsertAfter Text:=Chr(13) & Chr(10)
+       updateCustomDocumentProperty document, propId, propName & ", e.g. " & propValue, msoPropertyTypeString
+          
+          document.Content.InsertAfter Text:=propName & ": "
+          document.Characters.Last.Select
+          
+          AddDocPropertyField document.ActiveWindow.Selection.range, propId
+          document.Content.InsertAfter Text:=Chr(13) & Chr(10)
+      End If
     End If
   
   Next
@@ -277,3 +292,4 @@ Function GetTempFile() As String
     GetTempFile = FileSystemObject.GetSpecialFolder(2) & "\" & FileSystemObject.GetTempName
     
 End Function
+     

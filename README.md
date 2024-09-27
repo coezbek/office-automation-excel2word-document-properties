@@ -18,6 +18,14 @@ Not Features:
 
 How does it work: Every Named Range in Excel is inserted into Word as a Document Property which can be shown in the Document using a DocProperty field.
 
+## Installation and Demo Video
+
+<video src='https://github.com/user-attachments/assets/4702bdcf-7075-475a-8719-a508130ae04a' width="1280"></video>
+
+
+
+On Youtube: https://youtu.be/uSC0DJC_3g0
+
 ## Caution
 
 Running Office macros from untrusted source is dangerous. So make sure you know what you are doing. Please also see the [License](https://github.com/coezbek/office-automation-excel2word-document-properties/blob/main/LICENSE) for a disclaimer.
